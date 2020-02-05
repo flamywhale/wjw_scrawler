@@ -19,13 +19,16 @@ class PointReporter(EmailReporter):
         server.login(self.account['username'], self.account['password'])
 
         for province, items in messages.items():
-            province_messages = [(name, msg['title'], f'{name}：<a href={msg["url"]}>{msg["title"]}</a>')
-                                 for name, msg in items]
+            _, _, is_province = items[0]
+            province_messages = [
+                (name, msg['title'], f'{name}：<a href={msg["url"]}>{msg["title"]}</a>') for name, msg, _ in items]
             receivers = self.receivers.get(province, self.receivers['default'])
             if not receivers:
                 continue
             if isinstance(receivers, str):
                 receivers = [receivers]
+            if is_province:
+                receivers = [self.receivers['default']]
             for receiver in receivers:
                 for source, subject, message in province_messages:
                     self.send_email(server, receiver, source, subject, message)
