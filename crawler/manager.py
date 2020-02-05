@@ -88,14 +88,12 @@ class Manger:
             print(f'Ignore title from {source}: {title}')
         return need
 
-    def add_message(self, source, province, message):
+    def add_message(self, source, province, message, is_province=False):
         """Try to add new message to report"""
         if not self.need_report(source, message['title']):
             return False
         # Now we just have one message, but maybe we will extend it in future, so use list
         self._messages.setdefault(province, [])
-        self._messages[province].append((source, message))
+        self._messages[province].append((source, message, is_province))
         return True
-
-
 
