@@ -89,7 +89,8 @@ class Crawler:
         # If this is not recorded, save and report it
         if result != buffer:
             name = self.others['Chinese_name']
-            self.manager.add_message(name, self.others.get('province', name), result)
+            is_province = self.others['Chinese_name'] == self.others['province']
+            self.manager.add_message(name, self.others.get('province', name), result, is_province)
 
     def get_task(self, session):
         return asyncio.ensure_future(self.run(session))
